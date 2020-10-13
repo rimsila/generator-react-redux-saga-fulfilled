@@ -1,0 +1,27 @@
+{
+  "presets": ["next/babel", "@zeit/next-typescript/babel"],
+  "plugins": [
+    [
+      "module-resolver",
+      {
+        "root": ["./"],
+        "alias": {
+          "api": "./api",
+          "app-constants": "./app-constants",
+          "enums": "./enums",
+          "hocs": "./hocs",
+          "hooks": "./hooks",
+          "components": "./components",
+          "redux-store": "./redux-store"
+        }
+      }
+    ],
+    [
+      "import",
+      {
+        "libraryName": "antd",
+        "style": true
+      }
+    ]
+  ]
+}
