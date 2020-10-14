@@ -118,7 +118,7 @@ module.exports = class extends Generator {
     // Import the constants
     importConstantsHelper(REDUCER_PATH);
 
-    // Add constants in the case statemnts
+    // Add constants in the case statements
     this.fs.copy(REDUCER_PATH, REDUCER_PATH, {
       process(content) {
         const regEx = new RegExp(/\/\* new-constant-cases-go-here \*\//, 'g');
@@ -254,7 +254,7 @@ module.exports = class extends Generator {
     function* ${SAGA_NAME}() {
       const BOOL_VALUE = Math.random() >= 0.5;
 
-      yield delay(500); // Just sleep for half a sec just to look real. A saga requires a yield because it's a generator
+      yield delay(500);
 
       try {    
         if (BOOL_VALUE) {

@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import { <%= interfaceName %> } from "@/model";
 
 export type <%= stateShortName %>Errable =

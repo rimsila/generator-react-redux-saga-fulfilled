@@ -1,4 +1,6 @@
 import { createAction } from 'redux-actions';
+import { interfaceName } from "@/model";
+
 import {
   RESET_<%= STATE_NAME %>_DOABLES,
   TOGGLE_<%= STATE_NAME %>_BOOLEANABLE_STATE,
@@ -22,12 +24,12 @@ export const fetch<%= stateShortName %> = createAction<<%= stateName %>>(FETCH_<
   successible: { fetch<%= stateShortName %>SuccessMsg: null },
 }));
 
-export const fetch<%= stateShortName %>Success = createAction<<%= stateName %> , string>(
+export const fetch<%= stateShortName %>Success = createAction<<%= stateName %> , <%= interfaceName %>>(
   FETCH_<%= STATE_NAME %>_SUCCESS,
-  (<%= stateName %>) => ({
+  (<%= stateLower %>) => ({
     booleanable: { isFetch<%= stateShortName %>InProgress: false },
     successible: { fetch<%= stateShortName %>SuccessMsg: "FETCH_BOOK action fullfilled!" },
-    <%= stateName %>,
+    <%= stateLower %>,
   }),
 );
 

@@ -1,28 +1,33 @@
 import { createSelector } from 'reselect';
 import { IStoreState } from '../storeState';
-import {
-  <%= stateShortName %>Errable,
-  <%= stateShortName %>Booleanable,
-  <%= stateShortName %>Successible,
-} from './state';
 
 const <%= stateName %>  = (state: IStoreState) => state.<%= nameWithLowerCase %>;
 
 export const  <%= stateName %>Selector = createSelector(
   <%= stateName %>,
   ({
-    booleanable: { isFetch<%= stateShortName %>InProgress },
+    booleanable: { 
+      isFetch<%= stateShortName %>InProgress,
+      /* new-booleanable-goes-here */
+    },
+    successible: { fetch<%= stateShortName %>SuccessMsg,
+    /* new-successible-goes-here */
+  
+    },
     <%= stateLower %>,
-    errable: { fetch<%= stateShortName %>ErrorMsg },
-    successible: { fetch<%= stateShortName %>SuccessMsg },
+    errable: { fetch<%= stateShortName %>ErrorMsg,
+    /* new-errable-goes-here */
+  },
   }) => ({
-    isFetch<%= stateShortName %>InProgress,
     <%= stateLower %>,
     fetch<%= stateShortName %>ErrorMsg,
+    /* new-errable-goes-here */
+
     fetch<%= stateShortName %>SuccessMsg,
+    /* new-successible-goes-here */
+
+    isFetch<%= stateShortName %>InProgress,
+    /* new-booleanable-goes-here */
   }),
 );
 
-//#region Doables
-
-//#endregion

@@ -1,3 +1,6 @@
+/* eslint-disable prettier/prettier */
+// eslint-disable
+
 const Generator = require('yeoman-generator');
 const camelCase = require('camelcase');
 
@@ -73,7 +76,7 @@ module.exports = class extends Generator {
             .toString()
             .replace(
               regEx,
-              `isAddEdit${booleanable}, isDel${booleanable},isView${booleanable} /* new-booleanable-goes-here */`,
+              `isAddEdit${booleanable}, isDel${booleanable},isView${booleanable}, /* new-booleanable-goes-here */`,
             );
           return newContent;
         },
@@ -90,7 +93,7 @@ module.exports = class extends Generator {
       // Selector Booleanable
       this.fs.copy(SELECTOR_PATH, SELECTOR_PATH, {
         process(content) {
-          const newContent = content.toString().replace(regEx, `is${booleanable} /* new-booleanable-goes-here */`);
+          const newContent = content.toString().replace(regEx, ` is${booleanable}, /* new-booleanable-goes-here */`);
           return newContent;
         },
       });
