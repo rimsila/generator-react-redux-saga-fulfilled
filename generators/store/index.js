@@ -68,6 +68,7 @@ module.exports = class extends Generator {
         STATE_NAME,
         stateShortName,
         stateLower,
+        interfaceName,
       },
     );
 
@@ -132,7 +133,7 @@ module.exports = class extends Generator {
         stateName: selectorState,
         nameWithLowerCase: nameToCamelCase,
         stateShortName,
-        stateLower
+        stateLower,
       },
     );
 
@@ -229,11 +230,10 @@ module.exports = class extends Generator {
       },
     });
 
-
-
     // copy models into the models folder
     this.fs.copyTpl(this.templatePath('_model.ts'), this.destinationPath(`models/${nameWithLowerCase}.d.ts`), {
       interfaceName,
+      stateLower,
     });
 
     // update models/index.d.ts to add the new namespace to the list
@@ -244,7 +244,7 @@ module.exports = class extends Generator {
           .toString()
           .replace(
             regEx,
-            `export { ${interfaceName} } from './${nameWithLowerCase}';\n/* new-interface-import-goes-here */`,
+            `export { ${interfaceName} /* new-sub-interface-import-goes-here */ } from './${nameWithLowerCase}';\n/* new-interface-import-goes-here */`,
           );
         return newContent;
       },

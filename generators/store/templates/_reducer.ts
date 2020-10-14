@@ -13,7 +13,8 @@ import { <%= stateName %> } from './state';
 import { reducerPayloadDoableHelper } from '@/redux-store/rootReducer';
 
 const initialState: <%= stateName %> = {
-  <%= stateLower %>: [],
+  <%= stateLower %>: {},
+  /* new-state-goes-here */
   errable: {},
   booleanable: {},
   successible: {},

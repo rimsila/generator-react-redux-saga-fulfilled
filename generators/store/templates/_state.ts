@@ -1,4 +1,7 @@
-import { <%= interfaceName %> } from "@/model";
+import {
+   <%= interfaceName %>,
+  /* new-imported-model-goes-here */
+} from "@/model";
 
 export type <%= stateShortName %>Errable =
   | 'fetch<%= stateShortName %>ErrorMsg'
@@ -14,7 +17,8 @@ export type <%= stateShortName %>Successible =
 
 export interface <%= stateName %>{
 
-  readonly <%= stateLower %>?: <%= interfaceName %>[];
+  readonly <%= stateLower %>?: <%= interfaceName %>;
+  /* new-state-goes-here */
 
   //#region Doables
   readonly errable?: { [key in <%= stateShortName %>Errable]?: string };

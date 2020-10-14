@@ -6,6 +6,9 @@ const <%= stateName %>  = (state: IStoreState) => state.<%= nameWithLowerCase %>
 export const  <%= stateName %>Selector = createSelector(
   <%= stateName %>,
   ({
+    <%= stateLower %>,
+  /* new-state-goes-here */
+
     booleanable: { 
       isFetch<%= stateShortName %>InProgress,
       /* new-booleanable-goes-here */
@@ -14,12 +17,15 @@ export const  <%= stateName %>Selector = createSelector(
     /* new-successible-goes-here */
   
     },
-    <%= stateLower %>,
+
+
     errable: { fetch<%= stateShortName %>ErrorMsg,
     /* new-errable-goes-here */
   },
   }) => ({
     <%= stateLower %>,
+    /* new-state-goes-here */
+
     fetch<%= stateShortName %>ErrorMsg,
     /* new-errable-goes-here */
 
@@ -28,6 +34,8 @@ export const  <%= stateName %>Selector = createSelector(
 
     isFetch<%= stateShortName %>InProgress,
     /* new-booleanable-goes-here */
+
+    
   }),
 );
 

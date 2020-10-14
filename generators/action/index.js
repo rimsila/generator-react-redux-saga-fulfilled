@@ -31,21 +31,43 @@ module.exports = class extends Generator {
         message: 'Is it fullfillable? (Does it have SUCCESS & ERROR?)',
         default: false,
       },
-    ]).then(({ name, reducerName, isFulfillable }) => {
+      {
+        type: 'input',
+        name: 'state',
+        message: 'state name',
+        validate: str => {
+          if (str.trim().length > 0) {
+            return true;
+          }
+          return 'Please add a state name for your new action';
+        },
+      },
+      {
+        type: 'confirm',
+        name: 'isHasState',
+        message: 'add new state',
+        default: false,
+      },
+    ]).then(({ name, reducerName, isFulfillable, state, isHasState }) => {
       this.answers = {
         name: camelCase(name),
         reducerName,
         isFulfillable,
+        state,
+        isHasState,
       };
     });
   }
 
   writing() {
-    const { name, reducerName, isFulfillable } = this.answers;
+    const { name, reducerName, isFulfillable, state, isHasState } = this.answers;
     const actionNameToCamelCase = camelCase(name);
     const actionNameToPascalCase = camelCase(name, {
       pascalCase: true,
     });
+    const stateNameToCamelCase = camelCase(state);
+    const nameWithUpperCase = state.charAt(0).toUpperCase() + state.slice(1);
+    const interfaceName = `I${nameWithUpperCase}`;
 
     const regionnify = (content, region) => `//#region ${region}\n${content}\n//#endregion\n`;
 
@@ -56,6 +78,19 @@ module.exports = class extends Generator {
     const errorToCamelCase = ACTION_NAME => `${ACTION_NAME}Error`;
 
     const REDUX_STORE_BASE_PATH = `./redux-store/${reducerName.toLowerCase()}`;
+    const MODEL_BASE_PATH = './models';
+
+    const SELECTOR_PATH = `${REDUX_STORE_BASE_PATH}/selectors.ts`;
+    const regBoo = new RegExp(/\/\* new-booleanable-goes-here \*\//, 'g');
+    const regErr = new RegExp(/\/\* new-errable-goes-here \*\//, 'g');
+    const regSuc = new RegExp(/\/\* new-successible-goes-here \*\//, 'g');
+    const regSta = new RegExp(/\/\* new-state-goes-here \*\//, 'g');
+    const regMod = new RegExp(/\/\* new-imported-model-goes-here \*\//, 'g');
+    const regInt = new RegExp(/\/\* new-sub-interface-import-goes-here \*\//, 'g');
+    const STATE_PATH = `${REDUX_STORE_BASE_PATH}/state.ts`;
+    const MODEL_PATH = `${MODEL_BASE_PATH}/index.d.ts`;
+    const NEW_MODEL_PATH = `${MODEL_BASE_PATH}/${reducerName.toLowerCase()}.d.ts`;
+    const REDUCER_PATH = `${REDUX_STORE_BASE_PATH}/reducer.ts`;
 
     // #region Export from the `./actions` file
 
@@ -113,12 +148,11 @@ module.exports = class extends Generator {
     // #endregion
 
     // #region Import actions in the reducer and put it in the case statements
-    const REDUCER_PATH = `${REDUX_STORE_BASE_PATH}/reducer.ts`;
 
     // Import the constants
     importConstantsHelper(REDUCER_PATH);
 
-    // Add constants in the case statements
+    // Add constants in the case statemnts
     this.fs.copy(REDUCER_PATH, REDUCER_PATH, {
       process(content) {
         const regEx = new RegExp(/\/\* new-constant-cases-go-here \*\//, 'g');
@@ -185,13 +219,10 @@ module.exports = class extends Generator {
 
     // #region Do the things in the state.ts
     if (isFulfillable) {
-      const STATE_PATH = `${REDUX_STORE_BASE_PATH}/state.ts`;
-
       // Booleanable
       this.fs.copy(STATE_PATH, STATE_PATH, {
         process(content) {
-          const regEx = new RegExp(/\/\* new-booleanable-goes-here \*\//, 'g');
-          const newContent = content.toString().replace(regEx, `| '${booleanable}' /* new-booleanable-goes-here */`);
+          const newContent = content.toString().replace(regBoo, `| '${booleanable}' /* new-booleanable-goes-here */`);
           return newContent;
         },
       });
@@ -199,8 +230,7 @@ module.exports = class extends Generator {
       // Errable
       this.fs.copy(STATE_PATH, STATE_PATH, {
         process(content) {
-          const regEx = new RegExp(/\/\* new-errable-goes-here \*\//, 'g');
-          const newContent = content.toString().replace(regEx, `| '${errable}' /* new-errable-goes-here */`);
+          const newContent = content.toString().replace(regErr, `| '${errable}' /* new-errable-goes-here */`);
           return newContent;
         },
       });
@@ -208,8 +238,92 @@ module.exports = class extends Generator {
       // Successible
       this.fs.copy(STATE_PATH, STATE_PATH, {
         process(content) {
-          const regEx = new RegExp(/\/\* new-successible-goes-here \*\//, 'g');
-          const newContent = content.toString().replace(regEx, `| '${successible}' /* new-successible-goes-here */`);
+          const newContent = content.toString().replace(regSuc, `| '${successible}' /* new-successible-goes-here */`);
+          return newContent;
+        },
+      });
+    } else if (isHasState) {
+      //* ------ create new model in existing model store ----
+
+      this.fs.copy(REDUCER_PATH, REDUCER_PATH, {
+        process(content) {
+          const newContent = content.toString().replace(regSta, `${stateNameToCamelCase} /* new-state-goes-here */,`);
+          return newContent;
+        },
+      });
+
+      this.fs.copy(SELECTOR_PATH, SELECTOR_PATH, {
+        process(content) {
+          const newContent = content.toString().replace(regSta, `${stateNameToCamelCase} /* new-state-goes-here */,`);
+          return newContent;
+        },
+      });
+
+      this.fs.copy(MODEL_PATH, MODEL_PATH, {
+        process(content) {
+          const newContent = content
+            .toString()
+            .replace(regInt, `,${interfaceName} /* new-sub-interface-import-goes-here */`);
+          return newContent;
+        },
+      });
+
+      this.fs.copy(NEW_MODEL_PATH, NEW_MODEL_PATH, {
+        process(content) {
+          const newContent = content.toString().replace(
+            regMod,
+            `export interface ${interfaceName}
+               { ${stateNameToCamelCase}?: []
+              } \n/* new-imported-model-goes-here */`,
+          );
+          return newContent;
+        },
+      });
+
+      this.fs.copy(STATE_PATH, STATE_PATH, {
+        process(content) {
+          const newContent = content.toString().replace(regMod, `${interfaceName}\n/* new-imported-model-goes-here */`);
+          return newContent;
+        },
+      });
+
+      //* ----- init new state ------
+      this.fs.copy(STATE_PATH, STATE_PATH, {
+        process(content) {
+          const newContent = content
+            .toString()
+            .replace(
+              regSta,
+              `readonly ${stateNameToCamelCase}?: ${interfaceName}[] | Record<string, unknown> ;\n\t/* new-state-goes-here */`,
+            );
+
+          return newContent;
+        },
+      });
+    }
+
+    // #endregion
+
+    //* ------ #region Do the things in the selector.ts ----
+    if (isFulfillable) {
+      //* ----- Selector Booleanable ------
+      this.fs.copy(SELECTOR_PATH, SELECTOR_PATH, {
+        process(content) {
+          const newContent = content.toString().replace(regBoo, `${booleanable} \n\t /* new-booleanable-goes-here */,`);
+          return newContent;
+        },
+      });
+      //* ----- Selector errable ------
+      this.fs.copy(SELECTOR_PATH, SELECTOR_PATH, {
+        process(content) {
+          const newContent = content.toString().replace(regErr, `${errable} \n\t /* new-errable-goes-here */,`);
+          return newContent;
+        },
+      });
+      //* ----- Selector  ------
+      this.fs.copy(SELECTOR_PATH, SELECTOR_PATH, {
+        process(content) {
+          const newContent = content.toString().replace(regSuc, `${successible} \n\t /* new-successible-goes-here */,`);
           return newContent;
         },
       });
@@ -254,7 +368,7 @@ module.exports = class extends Generator {
     function* ${SAGA_NAME}() {
       const BOOL_VALUE = Math.random() >= 0.5;
 
-      yield delay(500);
+      yield delay(500); // Just sleep for half a sec just to look real. A saga requires a yield because it's a generator
 
       try {    
         if (BOOL_VALUE) {

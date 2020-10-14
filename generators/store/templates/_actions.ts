@@ -1,5 +1,5 @@
 import { createAction } from 'redux-actions';
-import { interfaceName } from "@/model";
+import { <%= interfaceName %> } from "@/model";
 
 import {
   RESET_<%= STATE_NAME %>_DOABLES,

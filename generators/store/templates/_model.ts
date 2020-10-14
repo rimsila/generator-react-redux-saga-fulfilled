@@ -1,4 +1,7 @@
 
 export interface <%= interfaceName %>  {
-  interfaceName?: [];
+  <%= stateLower %>?: [];
 }
+
+
+/* new-imported-model-goes-here */
