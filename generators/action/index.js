@@ -1,3 +1,4 @@
+/* eslint-disable */
 const Generator = require('yeoman-generator');
 const camelCase = require('camelcase');
 const decamelize = require('decamelize');
@@ -247,7 +248,9 @@ module.exports = class extends Generator {
 
       this.fs.copy(REDUCER_PATH, REDUCER_PATH, {
         process(content) {
-          const newContent = content.toString().replace(regSta, `${stateNameToCamelCase} /* new-state-goes-here */,`);
+          const newContent = content
+            .toString()
+            .replace(regSta, `${stateNameToCamelCase}:[] /* new-state-goes-here */,`);
           return newContent;
         },
       });
