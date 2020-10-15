@@ -1,12 +1,14 @@
-import React, {FC} from 'react';
-import './styles.scss';
+import * as React from 'react';
 
-interface IProps {};
+interface IProps { };
 
-export const <%= component %>: FC<IProps> = () => (
-  <div className="<%= className %>">
-    <%= component %> component
-  </div>
-);
+export const <%= component %>: React.FC <IProps> = (props) => {
+  const { } = props
+  return (
+    <div className="<%= className %>">
+      <%= component %> component
+    </div>
+  )
+};
 
-export default <%= component %>;
+export default React.memo(<%= component %>);

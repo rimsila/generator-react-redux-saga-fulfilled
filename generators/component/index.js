@@ -61,52 +61,46 @@ module.exports = class extends Generator {
       path = `components/pages/${pageName}`;
     }
 
-    const componentNamespace = `${path}/${camelCasedName}`.replace(
-      'components',
-      '.'
-    );
+    const componentNamespace = `${path}/${camelCasedName}`.replace('components', '.');
 
     // create folder project
     mkdirp(path);
 
     // copy component into the components folder
-    this.fs.copyTpl(
-      this.templatePath('_component.js'),
-      this.destinationPath(`${path}/${camelCasedName}/index.tsx`),
-      {
-        component,
-        className,
-        i18n: camelCasedName,
-      }
-    );
+    this.fs.copyTpl(this.templatePath('_component.js'), this.destinationPath(`${path}/${camelCasedName}/index.tsx`), {
+      component,
+      className,
+      i18n: camelCasedName,
+    });
 
-    // copy styles.scss
-    this.fs.copyTpl(
-      this.templatePath('_styles.scss'),
-      this.destinationPath(`${path}/${camelCasedName}/styles.scss`),
-      {
-        className,
-      }
-    );
+    // // copy styles.scss
+    // this.fs.copyTpl(
+    //   this.templatePath('_styles.scss'),
+    //   this.destinationPath(`${path}/${camelCasedName}/styles.scss`),
+    //   {
+    //     className,
+    //   }
+    // );
 
-    // copy i18n.json
-    this.fs.copyTpl(
-      this.templatePath('_i18n.json'),
-      this.destinationPath(`static/locales/en/${camelCasedName}.json`),
-      {
-        title,
-      }
-    );
+    // // copy i18n.json
+    // this.fs.copyTpl(
+    //   this.templatePath('_i18n.json'),
+    //   this.destinationPath(`static/locales/en/${camelCasedName}.json`),
+    //   this.destinationPath(`static/locales/km/${camelCasedName}.json`),
+    //   {
+    //     title,
+    //   }
+    // );
 
-    // copy unit test.js
-    this.fs.copyTpl(
-      this.templatePath('_test.js'),
-      this.destinationPath(`tests/units/components/${camelCasedName}.test.js`),
-      {
-        component,
-        camelCasedName,
-      }
-    );
+    // // copy unit test.js
+    // this.fs.copyTpl(
+    //   this.templatePath('_test.js'),
+    //   this.destinationPath(`tests/units/components/${camelCasedName}.test.js`),
+    //   {
+    //     component,
+    //     camelCasedName,
+    //   }
+    // );
 
     // update ccomponents/index.ts to add the new namespace to the list
     const indexPath = './components/index.ts';
@@ -118,7 +112,7 @@ module.exports = class extends Generator {
           .toString()
           .replace(
             regEx,
-            `export { default as ${component} } from '${componentNamespace}';\n/* new-component-import-goes-here */`
+            `export { default as ${component} } from '${componentNamespace}';\n/* new-component-import-goes-here */`,
           );
         return newContent;
       },

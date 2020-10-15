@@ -243,7 +243,9 @@ module.exports = class extends Generator {
           return newContent;
         },
       });
-    } else if (isHasState) {
+    }
+
+    if (isHasState) {
       //* ------ create new model in existing model store ----
 
       this.fs.copy(REDUCER_PATH, REDUCER_PATH, {
@@ -312,21 +314,21 @@ module.exports = class extends Generator {
       //* ----- Selector Booleanable ------
       this.fs.copy(SELECTOR_PATH, SELECTOR_PATH, {
         process(content) {
-          const newContent = content.toString().replace(regBoo, `${booleanable} \n\t /* new-booleanable-goes-here */,`);
+          const newContent = content.toString().replace(regBoo, `${booleanable}, \n\t /* new-booleanable-goes-here */`);
           return newContent;
         },
       });
       //* ----- Selector errable ------
       this.fs.copy(SELECTOR_PATH, SELECTOR_PATH, {
         process(content) {
-          const newContent = content.toString().replace(regErr, `${errable} \n\t /* new-errable-goes-here */,`);
+          const newContent = content.toString().replace(regErr, `${errable}, \n\t /* new-errable-goes-here */`);
           return newContent;
         },
       });
       //* ----- Selector  ------
       this.fs.copy(SELECTOR_PATH, SELECTOR_PATH, {
         process(content) {
-          const newContent = content.toString().replace(regSuc, `${successible} \n\t /* new-successible-goes-here */,`);
+          const newContent = content.toString().replace(regSuc, `${successible}, \n\t /* new-successible-goes-here */`);
           return newContent;
         },
       });
@@ -379,10 +381,6 @@ module.exports = class extends Generator {
         } else {
           yield put(${errorToCamelCase(actionNameToCamelCase)}(${ERROR_MSG}));
         }
-      } catch (error) {
-        yield put(${errorToCamelCase(actionNameToCamelCase)}(${ERROR_MSG}));
-      }
-    }
     `;
 
       // Add a saga

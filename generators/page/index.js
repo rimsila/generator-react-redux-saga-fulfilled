@@ -1,3 +1,7 @@
+/* eslint-disable object-curly-newline */
+/* eslint-disable function-paren-newline */
+/* eslint-disable implicit-arrow-linebreak */
+/* eslint-disable no-underscore-dangle */
 const Generator = require('yeoman-generator');
 const mkdirp = require('mkdirp');
 const humanizeString = require('humanize-string');
@@ -94,62 +98,20 @@ module.exports = class extends Generator {
       title,
     });
 
-    // copy styles.scss
-    this.fs.copyTpl(this.templatePath('_styles.scss'), this.destinationPath(`${pagePageWithRoot}/styles.scss`), {
-      className,
-    });
-
     // copy i18n.json
     this.fs.copyTpl(
       this.templatePath('_i18n.json'),
       this.destinationPath(`static/locales/en/${pagePageWithRoot}.json`),
+      this.destinationPath(`static/locales/km/${pagePageWithRoot}.json`),
       {
         title,
       },
     );
-    // copy unit test.js
-    this.fs.copyTpl(this.templatePath('_test.js'), this.destinationPath(`tests/units/${pagePageWithRoot}.test.js`), {
-      component: pascalCasedName,
-      decamelizedName,
-    });
-
-    const linkItem = `
-      <MenuItem
-        key={uuid()}
-        className={asPath === '/${decamelizedName}' ? activeClass : ''}
-      >
-        <Link href="/${decamelizedName}">
-          <a>${title}</a>
-        </Link>
-      </MenuItem>
-    `;
-
-    const LAYOUT_PATH = './components/global/layout/index.tsx';
-
-    // update server.js to add the new namespace to the list
-    this.fs.copy(LAYOUT_PATH, LAYOUT_PATH, {
-      process(content) {
-        const regEx = new RegExp(/{\/\* new-menu-item \*\/}/, 'g');
-        const newContent = content.toString().replace(regEx, `${linkItem}\n\t\t\t\t\t{/* new-menu-item */}`);
-        return newContent;
-      },
-    });
-
-    // update server.js to add the new namespace to the list
-    const SERVER_PATH = './server.js';
-
-    this.fs.copy(SERVER_PATH, SERVER_PATH, {
-      process(content) {
-        const regEx = new RegExp(/\/\* new-i18n-namespace-here \*\//, 'g');
-        const newContent = content.toString().replace(regEx, `, '${decamelizedName}'/* new-i18n-namespace-here */`);
-        return newContent;
-      },
-    });
 
     // Add reducer for this page
     if (createReducer) {
       this.composeWith(
-        'nextjs-typescript-antd:store',
+        'yarn store',
         {
           options: {
             name,

@@ -1,3 +1,5 @@
 
 /node_modules/**
-/templates/**
+/generator/templates/**
+.tsx
+.ts

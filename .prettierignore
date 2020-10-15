@@ -2,3 +2,5 @@ _*.js
 _*.scss
 _*.json
 generators/app/templates/src/LICENCE
+.tsx
+.ts
