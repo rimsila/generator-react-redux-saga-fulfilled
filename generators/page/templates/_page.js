@@ -1,9 +1,10 @@
 import * as React from 'react';
-import Layout from '@/components/global/layout';
+import Layout from '@/component';
 
 interface IProps {};
 
-export const <%= component %>: FC<IProps> = () => {return (
+export const <%= component %>: React.FC<IProps> = () => {
+  return (
   <Layout title="<%= title %>" description="This is the <%= title %> Page">
     <>
       <p>

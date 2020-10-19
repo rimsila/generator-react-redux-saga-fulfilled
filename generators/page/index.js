@@ -101,8 +101,8 @@ module.exports = class extends Generator {
     // copy i18n.json
     this.fs.copyTpl(
       this.templatePath('_i18n.json'),
-      this.destinationPath(`static/locales/en/${pagePageWithRoot}.json`),
-      this.destinationPath(`static/locales/km/${pagePageWithRoot}.json`),
+      this.destinationPath(`locales/en/${pagePageWithRoot}.json`),
+      this.destinationPath(`locales/km/${pagePageWithRoot}.json`),
       {
         title,
       },
