@@ -1,5 +1,5 @@
 import * as React from 'react';
-import Layout from '@/component';
+import { Layout } from '@/component';
 
 interface IProps {};
 

@@ -98,15 +98,15 @@ module.exports = class extends Generator {
       title,
     });
 
-    // copy i18n.json
-    this.fs.copyTpl(
-      this.templatePath('_i18n.json'),
-      this.destinationPath(`locales/en/${pagePageWithRoot}.json`),
-      this.destinationPath(`locales/km/${pagePageWithRoot}.json`),
-      {
-        title,
-      },
-    );
+    // // copy i18n.json
+    // this.fs.copyTpl(
+    //   this.templatePath('_i18n.json'),
+    //   this.destinationPath(`locales/en/${pagePageWithRoot}.json`),
+    //   this.destinationPath(`locales/km/${pagePageWithRoot}.json`),
+    //   {
+    //     title,
+    //   },
+    // );
 
     // Add reducer for this page
     if (createReducer) {
